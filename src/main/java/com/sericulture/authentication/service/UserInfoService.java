@@ -23,14 +23,14 @@ public class UserInfoService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<UserInfo> userDetail = userInfoRepository.findByEmailId(email);
+        Optional<UserInfo> userDetail = userInfoRepository.findByEmailID(email);
         return userDetail.map(UserInfoDetails::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found " + email));
     }
 
     public AuthApiResponse registerUser(UserInfo userInfo) {
         AuthApiResponse authApiResponse = new AuthApiResponse();
-        if(userInfoRepository.findByEmailIdAndRoleId(userInfo.getEmailId(),userInfo.getRoleId()).isPresent()) {
+        if(userInfoRepository.findByEmailIDAndRoleId(userInfo.getEmailID(),userInfo.getRoleId()).isPresent()) {
             authApiResponse.setError(1);
             authApiResponse.setMessage("Email already registered, please use a different email or try logging in!");
         }

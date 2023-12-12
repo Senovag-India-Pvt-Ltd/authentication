@@ -36,7 +36,7 @@ public class UserInfoController {
     private PasswordEncoder encoder;
 
     @Value("${app.rest.role:0}")
-    private int roleId;
+    private long roleId;
 
     //Just to test if correct JWT Token is saved or not
     @GetMapping("/test-token")
@@ -56,7 +56,7 @@ public class UserInfoController {
     @PostMapping("/login")
     public AuthApiResponse authenticateAndGetToken(@RequestBody JwtRequest authRequest) {
         AuthApiResponse authApiResponse = new AuthApiResponse();
-        Optional<UserInfo> userInfo=userInfoRepository.findByEmailIdAndRoleId(authRequest.getEmail(),roleId);
+        Optional<UserInfo> userInfo=userInfoRepository.findByEmailIDAndRoleId(authRequest.getEmail(),roleId);
         if(userInfo.isEmpty())
         {
             authApiResponse.setError(1);
