@@ -7,8 +7,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthApiResponse {
-
+public class LoginApiResponse {
     private int error;
     private String message;
+    private String token;
+    private String username;
+    private Long userMasterId;
+    private Long roleId;
+    private String phoneNumber;
 }

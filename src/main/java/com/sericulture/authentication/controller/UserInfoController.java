@@ -2,6 +2,7 @@ package com.sericulture.authentication.controller;
 
 import com.sericulture.authentication.model.AuthApiResponse;
 import com.sericulture.authentication.model.JwtRequest;
+import com.sericulture.authentication.model.LoginApiResponse;
 import com.sericulture.authentication.model.entity.UserInfo;
 import com.sericulture.authentication.repository.UserInfoRepository;
 import com.sericulture.authentication.service.JwtService;
@@ -54,26 +55,30 @@ public class UserInfoController {
     }
 
     @PostMapping("/login")
-    public AuthApiResponse authenticateAndGetToken(@RequestBody JwtRequest authRequest) {
-        AuthApiResponse authApiResponse = new AuthApiResponse();
-        Optional<UserInfo> userInfo=userInfoRepository.findByEmailIDAndRoleId(authRequest.getEmail(),roleId);
+    public LoginApiResponse authenticateAndGetToken(@RequestBody JwtRequest authRequest) {
+        LoginApiResponse loginApiResponse = new LoginApiResponse();
+        Optional<UserInfo> userInfo=userInfoRepository.findByUsername(authRequest.getUsername());
         if(userInfo.isEmpty())
         {
-            authApiResponse.setError(1);
-            authApiResponse.setMessage("Wrong email, please register first!");
+            loginApiResponse.setError(1);
+            loginApiResponse.setMessage("Wrong username, please register first!");
         }
         else if(!encoder.matches(authRequest.getPassword(),userInfo.get().getPassword()))
         {
-            authApiResponse.setError(1);
-            authApiResponse.setMessage("Wrong password, please try again!");
+            loginApiResponse.setError(1);
+            loginApiResponse.setMessage("Wrong password, please try again!");
         }
-        else{
-            String jwtToken = jwtService.generateToken(authRequest.getEmail());
-            authApiResponse.setError(0);
-            authApiResponse.setMessage("Correct email and password !");
-            authApiResponse.setToken(jwtToken);
+        else {
+            String jwtToken = jwtService.generateToken(authRequest.getUsername());
+            loginApiResponse.setError(0);
+            loginApiResponse.setMessage("Correct username and password!");
+            loginApiResponse.setToken(jwtToken);
+            loginApiResponse.setUserMasterId(userInfo.get().getUserMasterId());
+            loginApiResponse.setUsername(userInfo.get().getUsername());
+            loginApiResponse.setRoleId(userInfo.get().getRoleId());
+            loginApiResponse.setPhoneNumber(userInfo.get().getPhoneNumber());
         }
-        return authApiResponse;
+        return loginApiResponse;
     }
 
 }

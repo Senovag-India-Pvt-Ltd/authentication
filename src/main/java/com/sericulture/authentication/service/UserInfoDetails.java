@@ -9,12 +9,12 @@ import java.util.List;
 
 public class UserInfoDetails implements UserDetails {
 
-    private String email;
+    private String username;
     private String password;
     private List<GrantedAuthority> authorities;
 
     public UserInfoDetails(UserInfo userInfo) {
-        email = userInfo.getEmailID();
+        username = userInfo.getUsername();
         password = userInfo.getPassword();
     }
 
@@ -30,7 +30,7 @@ public class UserInfoDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override

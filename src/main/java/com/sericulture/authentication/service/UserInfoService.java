@@ -22,19 +22,15 @@ public class UserInfoService implements UserDetailsService {
     private PasswordEncoder encoder;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<UserInfo> userDetail = userInfoRepository.findByEmailID(email);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<UserInfo> userDetail = userInfoRepository.findByUsername(username);
         return userDetail.map(UserInfoDetails::new)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found " + email));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found " + username));
     }
 
     public AuthApiResponse registerUser(UserInfo userInfo) {
         AuthApiResponse authApiResponse = new AuthApiResponse();
-        if(userInfoRepository.findByEmailIDAndRoleId(userInfo.getEmailID(),userInfo.getRoleId()).isPresent()) {
-            authApiResponse.setError(1);
-            authApiResponse.setMessage("Email already registered, please use a different email or try logging in!");
-        }
-        else if(userInfoRepository.findByUsernameAndRoleId(userInfo.getUsername(),userInfo.getRoleId()).isPresent()) {
+        if(userInfoRepository.findByUsername(userInfo.getUsername()).isPresent()) {
             authApiResponse.setError(1);
             authApiResponse.setMessage("Username already registered, please use a different username or try logging in!");
         }

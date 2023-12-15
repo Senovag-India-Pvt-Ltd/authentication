@@ -28,7 +28,7 @@ public class UserInfo {
     @Column(name = "middle_name")
     private String middleName;
 
-    @Size(min = 2, max = 250, message = "Last name should be more than 1 characters.")
+    @Size(min = 0, max = 250, message = "Last name should be more than 1 characters.")
     @Column(name = "last_name")
     private String lastName;
 
@@ -36,8 +36,8 @@ public class UserInfo {
     @Column(name = "password")
     private String password;
 
-    @Size(min = 2, max = 250, message = "Email name should be more than 1 characters.")
-    @Column(name = "email_id", unique = true)
+    @Size(min = 0, max = 250, message = "Email name should be more than 1 characters.")
+    @Column(name = "email_id")
     private String emailID;
 
     @Column(name = "role_id")
@@ -45,5 +45,8 @@ public class UserInfo {
 
     @Column(name = "username", unique = true)
     private String username;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
 }
