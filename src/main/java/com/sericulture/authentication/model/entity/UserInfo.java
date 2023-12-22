@@ -43,6 +43,9 @@ public class UserInfo {
     @Column(name = "role_id")
     private Long roleId;
 
+    @Column(name = "market_id")
+    private Long marketId;
+
     @Column(name = "username", unique = true)
     private String username;
 

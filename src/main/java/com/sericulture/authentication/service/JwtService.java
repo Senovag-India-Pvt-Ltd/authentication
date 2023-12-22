@@ -28,6 +28,7 @@ public class JwtService {
 
     public static final String SECRET = "74c47decc64fd921299567f5f6467860dc9179ce2e723048c184fdf2fd6a32936470ecc3d639b6947e99f9c42735ed20552be14fda24084ad79627195aca3fb1";
 
+
     public String generateToken(String userName) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, userName);
@@ -76,8 +77,20 @@ public class JwtService {
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
 
-//        return !isTokenExpired(token);
+    public String refreshToken(String token) {
+        try {
+            final String username = extractUsername(token);
+            if(userInfoRepository.findByUsername(username).isEmpty()){
+                return "error";
+            }
+            else
+                return generateToken(username);
+        }
+        catch (Exception e){
+            return "error";
+        }
     }
 
 }

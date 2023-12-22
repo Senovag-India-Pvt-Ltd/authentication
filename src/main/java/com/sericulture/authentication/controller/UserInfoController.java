@@ -3,6 +3,7 @@ package com.sericulture.authentication.controller;
 import com.sericulture.authentication.model.AuthApiResponse;
 import com.sericulture.authentication.model.JwtRequest;
 import com.sericulture.authentication.model.LoginApiResponse;
+import com.sericulture.authentication.model.RefreshTokenModel;
 import com.sericulture.authentication.model.entity.UserInfo;
 import com.sericulture.authentication.repository.UserInfoRepository;
 import com.sericulture.authentication.service.JwtService;
@@ -54,6 +55,24 @@ public class UserInfoController {
         return service.registerUser(userInfo);
     }
 
+    @PostMapping("/refresh-token")
+    public RefreshTokenModel refreshToken(@RequestBody RefreshTokenModel refreshTokenModel) {
+        String newToken = jwtService.refreshToken(refreshTokenModel.getToken());
+        if(newToken.equals("error"))
+        {
+            refreshTokenModel.setError(1);
+            refreshTokenModel.setMessage("Wrong token passed");
+            refreshTokenModel.setToken("");
+        }
+        else {
+            refreshTokenModel.setError(0);
+            refreshTokenModel.setMessage("New token generated!");
+            refreshTokenModel.setToken(newToken);
+        }
+        return refreshTokenModel;
+    }
+
+
     @PostMapping("/login")
     public LoginApiResponse authenticateAndGetToken(@RequestBody JwtRequest authRequest) {
         LoginApiResponse loginApiResponse = new LoginApiResponse();
@@ -76,6 +95,7 @@ public class UserInfoController {
             loginApiResponse.setUserMasterId(userInfo.get().getUserMasterId());
             loginApiResponse.setUsername(userInfo.get().getUsername());
             loginApiResponse.setRoleId(userInfo.get().getRoleId());
+            loginApiResponse.setMarketId(userInfo.get().getMarketId());
             loginApiResponse.setPhoneNumber(userInfo.get().getPhoneNumber());
         }
         return loginApiResponse;

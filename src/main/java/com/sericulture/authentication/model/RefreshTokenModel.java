@@ -7,13 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginApiResponse {
+public class RefreshTokenModel {
+
     private int error;
     private String message;
     private String token;
-    private String username;
-    private Long userMasterId;
-    private Long roleId;
-    private Long marketId;
-    private String phoneNumber;
 }
