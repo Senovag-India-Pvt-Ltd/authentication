@@ -7,10 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginApiResponse {
-    private int error;
-    private String message;
-    private String token;
+public class JwtPayloadData {
     private String username;
     private Long userMasterId;
     private Long roleId;
