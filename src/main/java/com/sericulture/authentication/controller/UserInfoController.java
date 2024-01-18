@@ -4,8 +4,10 @@ import com.sericulture.authentication.model.AuthApiResponse;
 import com.sericulture.authentication.model.JwtRequest;
 import com.sericulture.authentication.model.LoginApiResponse;
 import com.sericulture.authentication.model.RefreshTokenModel;
+import com.sericulture.authentication.model.entity.MarketMasterInfo;
 import com.sericulture.authentication.model.entity.UserInfo;
 import com.sericulture.authentication.model.entity.UserPreferenceInfo;
+import com.sericulture.authentication.repository.MarketMasterInfoRepository;
 import com.sericulture.authentication.repository.UserInfoRepository;
 import com.sericulture.authentication.repository.UserPreferenceInfoRepository;
 import com.sericulture.authentication.service.JwtService;
@@ -37,6 +39,9 @@ public class UserInfoController {
     private AuthenticationManager authenticationManager;
     @Autowired
     UserPreferenceInfoRepository userPreferenceInfoRepository;
+
+    @Autowired
+    MarketMasterInfoRepository marketMasterInfoRepository;
 
     @Autowired
     private PasswordEncoder encoder;
@@ -102,8 +107,17 @@ public class UserInfoController {
             }else{
                 loginApiResponse.setGodownId(Integer.parseInt(userPreference.getGodownId().toString()));
             }
+            MarketMasterInfo marketMasterInfo = marketMasterInfoRepository.findByMarketMasterIdAndActive(userInfo.get().getMarketId(),true);
+            if(marketMasterInfo == null){
+                loginApiResponse.setMarketName("");
+            }else{
+                loginApiResponse.setMarketName(marketMasterInfo.getMarketMasterName());
+            }
             loginApiResponse.setUserMasterId(userInfo.get().getUserMasterId());
             loginApiResponse.setUsername(userInfo.get().getUsername());
+            loginApiResponse.setFirstName(userInfo.get().getFirstName());
+            loginApiResponse.setLastName(userInfo.get().getLastName());
+            loginApiResponse.setEmailId(userInfo.get().getEmailID());
             loginApiResponse.setRoleId(userInfo.get().getRoleId());
             loginApiResponse.setPhoneNumber(userInfo.get().getPhoneNumber());
             loginApiResponse.setMarketId(userInfo.get().getMarketId());

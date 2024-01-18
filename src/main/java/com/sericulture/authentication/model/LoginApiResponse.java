@@ -12,6 +12,9 @@ public class LoginApiResponse {
     private String message;
     private String token;
     private String username;
+    private String firstName;
+    private String lastName;
+    private String emailId;
     private Long userMasterId;
     private Long roleId;
     private String phoneNumber;
@@ -20,4 +23,5 @@ public class LoginApiResponse {
     private Long userTypeId;
     private String deviceId;
     private int godownId;
+    private String marketName;
 }
