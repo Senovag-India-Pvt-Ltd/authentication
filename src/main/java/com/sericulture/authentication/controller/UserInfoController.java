@@ -3,8 +3,11 @@ package com.sericulture.authentication.controller;
 import com.sericulture.authentication.model.AuthApiResponse;
 import com.sericulture.authentication.model.JwtRequest;
 import com.sericulture.authentication.model.LoginApiResponse;
+import com.sericulture.authentication.model.RefreshTokenModel;
 import com.sericulture.authentication.model.entity.UserInfo;
+import com.sericulture.authentication.model.entity.UserPreferenceInfo;
 import com.sericulture.authentication.repository.UserInfoRepository;
+import com.sericulture.authentication.repository.UserPreferenceInfoRepository;
 import com.sericulture.authentication.service.JwtService;
 import com.sericulture.authentication.service.UserInfoService;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +35,8 @@ public class UserInfoController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    UserPreferenceInfoRepository userPreferenceInfoRepository;
 
     @Autowired
     private PasswordEncoder encoder;
@@ -54,6 +59,28 @@ public class UserInfoController {
         return service.registerUser(userInfo);
     }
 
+    @PostMapping("/refresh-token")
+    public RefreshTokenModel refreshToken(@RequestBody RefreshTokenModel refreshTokenModel) {
+//        log.info("Token payload : {},{},{}",
+//                jwtService.extractJwtPayload(refreshTokenModel.getToken()).getGodownId(),
+//                jwtService.extractJwtPayload(refreshTokenModel.getToken()).getPhoneNumber(),
+//                jwtService.extractJwtPayload(refreshTokenModel.getToken()).getUserType());
+        String newToken = jwtService.refreshToken(refreshTokenModel.getToken());
+        if(newToken.equals("error"))
+        {
+            refreshTokenModel.setError(1);
+            refreshTokenModel.setMessage("Wrong token passed");
+            refreshTokenModel.setToken("");
+        }
+        else {
+            refreshTokenModel.setError(0);
+            refreshTokenModel.setMessage("New token generated!");
+            refreshTokenModel.setToken(newToken);
+        }
+        return refreshTokenModel;
+    }
+
+
     @PostMapping("/login")
     public LoginApiResponse authenticateAndGetToken(@RequestBody JwtRequest authRequest) {
         LoginApiResponse loginApiResponse = new LoginApiResponse();
@@ -69,14 +96,24 @@ public class UserInfoController {
             loginApiResponse.setMessage("Wrong password, please try again!");
         }
         else {
-            String jwtToken = jwtService.generateToken(authRequest.getUsername());
-            loginApiResponse.setError(0);
-            loginApiResponse.setMessage("Correct username and password!");
-            loginApiResponse.setToken(jwtToken);
+            UserPreferenceInfo userPreference = userPreferenceInfoRepository.findByUserMasterIdAndActive(userInfo.get().getUserMasterId(),true);
+            if(userPreference == null){
+                loginApiResponse.setGodownId(0);
+            }else{
+                loginApiResponse.setGodownId(Integer.parseInt(userPreference.getGodownId().toString()));
+            }
             loginApiResponse.setUserMasterId(userInfo.get().getUserMasterId());
             loginApiResponse.setUsername(userInfo.get().getUsername());
             loginApiResponse.setRoleId(userInfo.get().getRoleId());
             loginApiResponse.setPhoneNumber(userInfo.get().getPhoneNumber());
+            loginApiResponse.setMarketId(userInfo.get().getMarketId());
+            loginApiResponse.setUserType(userInfo.get().getUserType());
+            loginApiResponse.setUserTypeId(userInfo.get().getUserTypeId());
+            loginApiResponse.setDeviceId(userInfo.get().getDeviceId());
+            String jwtToken = jwtService.generateToken(loginApiResponse,authRequest.getUsername());
+            loginApiResponse.setError(0);
+            loginApiResponse.setMessage("Correct username and password!");
+            loginApiResponse.setToken(jwtToken);
         }
         return loginApiResponse;
     }

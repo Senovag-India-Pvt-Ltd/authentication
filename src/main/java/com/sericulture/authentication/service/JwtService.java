@@ -1,5 +1,8 @@
 package com.sericulture.authentication.service;
 
+import com.sericulture.authentication.model.JwtPayloadData;
+import com.sericulture.authentication.model.LoginApiResponse;
+import com.sericulture.authentication.model.entity.UserInfo;
 import com.sericulture.authentication.repository.UserInfoRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -15,6 +18,7 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Component
@@ -27,11 +31,6 @@ public class JwtService {
     private int jwtExpiringMinutes;
 
     public static final String SECRET = "74c47decc64fd921299567f5f6467860dc9179ce2e723048c184fdf2fd6a32936470ecc3d639b6947e99f9c42735ed20552be14fda24084ad79627195aca3fb1";
-
-    public String generateToken(String userName) {
-        Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userName);
-    }
 
     private String createToken(Map<String, Object> claims, String userName) {
         return Jwts.builder()
@@ -51,11 +50,11 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public Date extractExpiration(String token) {
+    private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
@@ -76,8 +75,83 @@ public class JwtService {
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
 
-//        return !isTokenExpired(token);
+    /**
+     * Generates token when valid username is passed
+     * @param loginApiResponse
+     * @param userName
+     * @return
+     */
+
+    public String generateToken(LoginApiResponse loginApiResponse, String userName) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("godownId",loginApiResponse.getGodownId());
+        claims.put("username",loginApiResponse.getUsername());
+        claims.put("userMasterId",loginApiResponse.getUserMasterId());
+        claims.put("roleId",loginApiResponse.getRoleId());
+        claims.put("phoneNumber",loginApiResponse.getPhoneNumber());
+        claims.put("marketId",loginApiResponse.getMarketId());
+        claims.put("userType",loginApiResponse.getUserType());
+        claims.put("userTypeId",loginApiResponse.getUserTypeId());
+        claims.put("deviceId",loginApiResponse.getDeviceId());
+        return createToken(claims, userName);
+    }
+
+    /**
+     * This function generates a new token from previous token with valid username as subject
+     *
+     * @param token
+     * @return String
+     */
+
+    public String refreshToken(String token) {
+        try {
+            final String username = extractUsername(token);
+            Optional<UserInfo> userInfo=userInfoRepository.findByUsername(username);
+            if(userInfo.isEmpty()){
+                return "error";
+            }
+            else
+            {
+                LoginApiResponse loginApiResponse=new LoginApiResponse();
+                loginApiResponse.setError(0);
+                loginApiResponse.setMessage("Correct username and password!");
+                loginApiResponse.setUserMasterId(userInfo.get().getUserMasterId());
+                loginApiResponse.setUsername(userInfo.get().getUsername());
+                loginApiResponse.setRoleId(userInfo.get().getRoleId());
+                loginApiResponse.setPhoneNumber(userInfo.get().getPhoneNumber());
+                loginApiResponse.setMarketId(userInfo.get().getMarketId());
+                loginApiResponse.setUserType(userInfo.get().getUserType());
+                loginApiResponse.setUserTypeId(userInfo.get().getUserTypeId());
+                loginApiResponse.setDeviceId(userInfo.get().getDeviceId());
+                return generateToken(loginApiResponse,username);
+            }
+        }
+        catch (Exception e){
+            return "error";
+        }
+    }
+
+    /**
+     * This function can be used to decrypt token and get payload data in the form of JwtPayloadData
+     *
+     * @param token
+     * @return JwtPayloadData
+     */
+    public JwtPayloadData extractJwtPayload(String token){
+        JwtPayloadData jwtPayloadData=new JwtPayloadData();
+        final Claims claims = extractAllClaims(token);
+        jwtPayloadData.setGodownId(claims.get("godownId",Integer.class));
+        jwtPayloadData.setUsername(claims.get("username",String.class));
+        jwtPayloadData.setUserMasterId(claims.get("userMasterId",Long.class));
+        jwtPayloadData.setRoleId(claims.get("roleId",Long.class));
+        jwtPayloadData.setPhoneNumber(claims.get("phoneNumber",String.class));
+        jwtPayloadData.setMarketId(claims.get("marketId",Integer.class));
+        jwtPayloadData.setUserType(claims.get("userType",Integer.class));
+        jwtPayloadData.setUserTypeId(claims.get("userTypeId",Long.class));
+        jwtPayloadData.setDeviceId(claims.get("deviceId",String.class));
+        return jwtPayloadData;
     }
 
 }

@@ -6,6 +6,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +19,7 @@ import java.io.IOException;
 
 // This class helps us to validate the generated jwt token 
 @Component
+@Slf4j
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Autowired
@@ -35,6 +37,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
             username = jwtService.extractUsername(token);
+        }
+        else {
+            log.info("Received a request without JWT token");
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
