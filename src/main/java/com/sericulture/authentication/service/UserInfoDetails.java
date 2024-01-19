@@ -1,6 +1,8 @@
 package com.sericulture.authentication.service;
 
 import com.sericulture.authentication.model.entity.UserInfo;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -11,11 +13,18 @@ public class UserInfoDetails implements UserDetails {
 
     private String username;
     private String password;
+    private Integer marketId;
+    private Long userMasterId;
+    @Getter
+    @Setter
+    private String jwtToken;
     private List<GrantedAuthority> authorities;
 
     public UserInfoDetails(UserInfo userInfo) {
         username = userInfo.getUsername();
-        password = userInfo.getPassword();
+        //password = userInfo.getPassword();
+        marketId = userInfo.getMarketId();
+        userMasterId = userInfo.getUserMasterId();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.sericulture.authentication.filter;
 
+import com.sericulture.authentication.service.UserInfoDetails;
 import com.sericulture.authentication.service.UserInfoService;
 import com.sericulture.authentication.service.JwtService;
 import jakarta.servlet.FilterChain;
@@ -45,6 +46,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             if (jwtService.validateToken(token, userDetails)) {
+                ((UserInfoDetails)userDetails).setJwtToken(token);
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails,
                         null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
