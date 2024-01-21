@@ -59,7 +59,7 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    private Claims extractAllClaims(String token) {
+    public Claims extractAllClaims(String token) {
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSignKey())
@@ -132,26 +132,4 @@ public class JwtService {
             return "error";
         }
     }
-
-    /**
-     * This function can be used to decrypt token and get payload data in the form of JwtPayloadData
-     *
-     * @param token
-     * @return JwtPayloadData
-     */
-    public JwtPayloadData extractJwtPayload(String token){
-        JwtPayloadData jwtPayloadData=new JwtPayloadData();
-        final Claims claims = extractAllClaims(token);
-        jwtPayloadData.setGodownId(claims.get("godownId",Integer.class));
-        jwtPayloadData.setUsername(claims.get("username",String.class));
-        jwtPayloadData.setUserMasterId(claims.get("userMasterId",Long.class));
-        jwtPayloadData.setRoleId(claims.get("roleId",Long.class));
-        jwtPayloadData.setPhoneNumber(claims.get("phoneNumber",String.class));
-        jwtPayloadData.setMarketId(claims.get("marketId",Integer.class));
-        jwtPayloadData.setUserType(claims.get("userType",Integer.class));
-        jwtPayloadData.setUserTypeId(claims.get("userTypeId",Long.class));
-        jwtPayloadData.setDeviceId(claims.get("deviceId",String.class));
-        return jwtPayloadData;
-    }
-
 }
