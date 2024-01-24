@@ -1,4 +1,4 @@
-package com.sericulture;
+package com.sericulture.authentication;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
