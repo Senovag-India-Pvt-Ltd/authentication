@@ -49,7 +49,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth
                                 .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
-                                .requestMatchers("/v3/api-docs/**","/auth/register","/auth/login","/auth/refresh-token","/swagger-ui/**","/login","/actuator/**","/v1/userMaster/generate-otp-by-user-name", "/v1/userMaster/verify-otp-by-user-name").permitAll()
+                                .requestMatchers("/v3/api-docs/**","/auth/register","/auth/login","/auth/refresh-token","/swagger-ui/**","/login","/actuator/**","/v1/userMaster/generate-otp-by-user-name-and-password", "/v1/userMaster/verify-otp-by-user-name").permitAll()
                                 .anyRequest().authenticated()
                 );
 
