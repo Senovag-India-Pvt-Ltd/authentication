@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,4 +26,7 @@ public class LoginApiResponse {
     private String deviceId;
     private int godownId;
     private String marketName;
+    private BigDecimal marketLat;
+    private BigDecimal marketLongitude;
+    private BigDecimal radius;
 }

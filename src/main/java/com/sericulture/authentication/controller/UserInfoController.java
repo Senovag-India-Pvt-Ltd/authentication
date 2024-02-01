@@ -112,6 +112,9 @@ public class UserInfoController {
                 loginApiResponse.setMarketName("");
             }else{
                 loginApiResponse.setMarketName(marketMasterInfo.getMarketMasterName());
+                loginApiResponse.setMarketLat(marketMasterInfo.getMarketLatitude());
+                loginApiResponse.setMarketLongitude(marketMasterInfo.getMarketLongitude());
+                loginApiResponse.setRadius(marketMasterInfo.getRadius());
             }
             loginApiResponse.setUserMasterId(userInfo.get().getUserMasterId());
             loginApiResponse.setUsername(userInfo.get().getUsername());
