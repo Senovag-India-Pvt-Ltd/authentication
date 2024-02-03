@@ -1,6 +1,5 @@
 package com.sericulture.authentication.service;
 
-import com.sericulture.authentication.model.JwtPayloadData;
 import com.sericulture.authentication.model.LoginApiResponse;
 import com.sericulture.authentication.model.entity.UserInfo;
 import com.sericulture.authentication.repository.UserInfoRepository;
@@ -119,7 +118,7 @@ public class JwtService {
                 loginApiResponse.setMessage("Correct username and password!");
                 loginApiResponse.setUserMasterId(userInfo.get().getUserMasterId());
                 loginApiResponse.setUsername(userInfo.get().getUsername());
-                loginApiResponse.setRoleId(userInfo.get().getRoleId());
+                loginApiResponse.setRoleId(userInfo.get().getRole().getRoleId());
                 loginApiResponse.setPhoneNumber(userInfo.get().getPhoneNumber());
                 loginApiResponse.setMarketId(userInfo.get().getMarketId());
                 loginApiResponse.setUserType(userInfo.get().getUserType());

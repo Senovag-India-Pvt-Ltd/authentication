@@ -58,11 +58,11 @@ public class UserInfoController {
         return authApiResponse;
     }
 
-    @PostMapping("/register")
+  /*  @PostMapping("/register")
     public AuthApiResponse registerUser(@RequestBody UserInfo userInfo) {
         userInfo.setRoleId(roleId);
         return service.registerUser(userInfo);
-    }
+    } */
 
     @PostMapping("/refresh-token")
     public RefreshTokenModel refreshToken(@RequestBody RefreshTokenModel refreshTokenModel) {
@@ -118,7 +118,7 @@ public class UserInfoController {
             loginApiResponse.setFirstName(userInfo.get().getFirstName());
             loginApiResponse.setLastName(userInfo.get().getLastName());
             loginApiResponse.setEmailId(userInfo.get().getEmailID());
-            loginApiResponse.setRoleId(userInfo.get().getRoleId());
+            loginApiResponse.setRoleId(userInfo.get().getRole().getRoleId());
             loginApiResponse.setPhoneNumber(userInfo.get().getPhoneNumber());
             loginApiResponse.setMarketId(userInfo.get().getMarketId());
             loginApiResponse.setUserType(userInfo.get().getUserType());
