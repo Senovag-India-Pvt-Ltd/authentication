@@ -50,13 +50,13 @@ public class UserInfoController {
     private long roleId;
 
     //Just to test if correct JWT Token is saved or not
-    @GetMapping("/test-token")
+   /* @GetMapping("/test-token")
     public AuthApiResponse checkToken() {
         AuthApiResponse authApiResponse = new AuthApiResponse();
         authApiResponse.setError(0);
         authApiResponse.setMessage("Welcome to the sample secured endpoint, your token is correct!");
         return authApiResponse;
-    }
+    }*/
 
   /*  @PostMapping("/register")
     public AuthApiResponse registerUser(@RequestBody UserInfo userInfo) {
