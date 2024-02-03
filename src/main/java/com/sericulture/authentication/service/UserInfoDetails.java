@@ -1,20 +1,23 @@
 package com.sericulture.authentication.service;
 
+import com.sericulture.authentication.model.entity.RoleMaster;
 import com.sericulture.authentication.model.entity.UserInfo;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 public class UserInfoDetails implements UserDetails {
-
     private String username;
     private String password;
     private Integer marketId;
     private Long userMasterId;
+
     @Getter
     @Setter
     private String jwtToken;
@@ -25,6 +28,9 @@ public class UserInfoDetails implements UserDetails {
         //password = userInfo.getPassword();
         marketId = userInfo.getMarketId();
         userMasterId = userInfo.getUserMasterId();
+        if(Objects.nonNull(userInfo.getRole()) && Objects.nonNull(userInfo.getRole().getRoleName())) {
+            authorities = List.of(new SimpleGrantedAuthority(userInfo.getRole().getRoleName().toUpperCase()));
+        }
     }
 
     @Override
