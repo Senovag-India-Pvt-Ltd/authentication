@@ -53,6 +53,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
+        // Add X-XSS-Protection header
+        response.setHeader("X-XSS-Protection", "1");
         filterChain.doFilter(request, response);
     }
 }
