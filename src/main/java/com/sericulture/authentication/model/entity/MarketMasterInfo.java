@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalTime;
 
 @Entity
@@ -101,6 +102,15 @@ public class MarketMasterInfo {
 
     @Column(name = "releer_minimum_balance")
     private Long reelerMinimumBalance;
+
+    @Column(name = "market_lat")
+    private BigDecimal marketLatitude;
+
+    @Column(name = "market_longitude")
+    private BigDecimal marketLongitude;
+
+    @Column(name = "radius")
+    private BigDecimal radius;
 
     @Column(name = "ACTIVE", columnDefinition = "TINYINT")
     private Boolean active;

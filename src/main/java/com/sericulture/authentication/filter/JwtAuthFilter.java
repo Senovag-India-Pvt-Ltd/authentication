@@ -53,6 +53,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
+
+        // 1.1.1 Content-Security-Policy Header Missing
+        response.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self';");
+
+        //1.1.2 Strict-Transport-Security Header Missing
+        // response.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+//        response.setHeader("Strict-Transport-Security", "max-age=31536000;");
+
+        // Add X-XSS-Protection header
+        response.setHeader("X-XSS-Protection", "1");
         filterChain.doFilter(request, response);
     }
 }
