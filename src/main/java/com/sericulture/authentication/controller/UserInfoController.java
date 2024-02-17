@@ -50,19 +50,19 @@ public class UserInfoController {
     private long roleId;
 
     //Just to test if correct JWT Token is saved or not
-    @GetMapping("/test-token")
+   /* @GetMapping("/test-token")
     public AuthApiResponse checkToken() {
         AuthApiResponse authApiResponse = new AuthApiResponse();
         authApiResponse.setError(0);
         authApiResponse.setMessage("Welcome to the sample secured endpoint, your token is correct!");
         return authApiResponse;
-    }
+    }*/
 
-    @PostMapping("/register")
+  /*  @PostMapping("/register")
     public AuthApiResponse registerUser(@RequestBody UserInfo userInfo) {
         userInfo.setRoleId(roleId);
         return service.registerUser(userInfo);
-    }
+    } */
 
     @PostMapping("/refresh-token")
     public RefreshTokenModel refreshToken(@RequestBody RefreshTokenModel refreshTokenModel) {
@@ -121,7 +121,7 @@ public class UserInfoController {
             loginApiResponse.setFirstName(userInfo.get().getFirstName());
             loginApiResponse.setLastName(userInfo.get().getLastName());
             loginApiResponse.setEmailId(userInfo.get().getEmailID());
-            loginApiResponse.setRoleId(userInfo.get().getRoleId());
+            loginApiResponse.setRoleId(userInfo.get().getRole().getRoleId());
             loginApiResponse.setPhoneNumber(userInfo.get().getPhoneNumber());
             loginApiResponse.setMarketId(userInfo.get().getMarketId());
             loginApiResponse.setUserType(userInfo.get().getUserType());

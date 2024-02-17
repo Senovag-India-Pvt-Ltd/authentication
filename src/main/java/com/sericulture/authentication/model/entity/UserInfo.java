@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.management.relation.Role;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -40,8 +42,9 @@ public class UserInfo {
     @Column(name = "email_id")
     private String emailID;
 
-    @Column(name = "role_id")
-    private Long roleId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "role_id")
+    private RoleMaster role;
 
     @Column(name = "username", unique = true)
     private String username;
