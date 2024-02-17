@@ -59,6 +59,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         //1.1.2 Strict-Transport-Security Header Missing
         // response.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+//        response.setHeader("Strict-Transport-Security", "max-age=31536000;");
 
         // Add X-XSS-Protection header
         response.setHeader("X-XSS-Protection", "1");
