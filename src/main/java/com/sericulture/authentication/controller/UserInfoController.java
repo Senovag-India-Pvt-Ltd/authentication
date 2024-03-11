@@ -121,7 +121,15 @@ public class UserInfoController {
             loginApiResponse.setFirstName(userInfo.get().getFirstName());
             loginApiResponse.setLastName(userInfo.get().getLastName());
             loginApiResponse.setEmailId(userInfo.get().getEmailID());
-            loginApiResponse.setRoleId(userInfo.get().getRole().getRoleId());
+            if(userInfo.get().getRole() != null) {
+                if (userInfo.get().getRole().getRoleId() != null) {
+                    loginApiResponse.setRoleId(userInfo.get().getRole().getRoleId());
+                } else {
+                    loginApiResponse.setRoleId(0L);
+                }
+            }else{
+                loginApiResponse.setRoleId(0L);
+            }
             loginApiResponse.setPhoneNumber(userInfo.get().getPhoneNumber());
             loginApiResponse.setMarketId(userInfo.get().getMarketId());
             loginApiResponse.setUserType(userInfo.get().getUserType());
