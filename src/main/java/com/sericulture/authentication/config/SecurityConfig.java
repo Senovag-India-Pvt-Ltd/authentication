@@ -59,6 +59,11 @@ public class SecurityConfig {
 
         http.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
 
+        http.headers().addHeaderWriter((request, response) -> {
+            response.setHeader("X-Content-Type-Options", "nosniff");
+        });
+
+
         return http.build();
     }
 
