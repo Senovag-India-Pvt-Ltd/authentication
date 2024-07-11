@@ -41,6 +41,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
         else {
             log.info("Received a request without JWT token");
+            log.info("auth header is {}",authHeader);
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
